@@ -1,65 +1,84 @@
 <?php
+include_once 'Math/Integer.php';
 
-// $Id$
-// Example of use of Math_Integer
+$h = '012346789abcdef';
+echo "INPUT: $h\n";
+echo Math_Integer::_toIntegerString($h)."\n\n"; 
 
-echo date('\* r')."\n";
-echo '* PHP version: '.phpversion()."\n";
-echo '* Zend version: '.zend_version()."\n";
+$h = 'efaaffadadfadad11234dfaed9002123346678878';
+echo "INPUT: $h\n";
+echo Math_Integer::_toIntegerString($h)."\n\n"; 
 
-// force to use a particular lib
-// comment all out to get automatic selection
-//define ('MATH_INTLIB', 'gmp');
-//define ('MATH_INTLIB', 'bcmath');
-//define ('MATH_INTLIB', 'std');
+$f = '22331242343213222231423234234234234234234111232123.0000000';
+echo "INPUT: $f\n";
+echo Math_Integer::_toIntegerString($f, MATH_INTEGER_AUTO, true)."\n\n"; 
 
-include_once 'Math/IntegerOp.php';
-if (MATH_INTLIB == 'gmp' || MATH_INTLIB == 'bcmath') {
-    $i1 = new Math_Integer('333333333333333333333333');
-    $i2 = new Math_Integer('111111111111111111111111');
+$f = '22331242343213222231423234234234234234234111232123.1';
+echo "INPUT: $f\n";
+print_r(Math_Integer::_toIntegerString($f)); 
+echo Math_Integer::_toIntegerString($f, MATH_INTEGER_AUTO, true)."\n"; 
+
+$int = Math_Integer::create($f, MATH_INTEGER_GMP, true);
+$hint = Math_Integer::create($h, MATH_INTEGER_GMP, true);
+print_r($int);
+echo 'Math_Integer_GMP: '.$int->toString()."\n";
+print_r($hint);
+echo 'Math_Integer_GMP: '.$hint->toString()."\n";
+$foo = $int->add($hint);
+var_dump($foo);
+echo 'Adding int to hint: '.$int->toString()."\n";
+$bad  = 1234;
+$foo = $int->add($bad);
+var_dump($foo);
+
+$gcd = '12341123342312422313245';
+echo "Fixed gcd: $gcd\n";
+$tmp1 = Math_Integer::create($gcd);
+$tmp2 = $tmp1->clone();
+$tmp1->mul(Math_Integer::create(3));
+$tmp2->mul(Math_Integer::create(5));
+$v1 = $tmp1->toString();
+$v2 = $tmp2->toString();
+
+$i1 = Math_Integer::create($v1, MATH_INTEGER_GMP);
+$i2 = Math_Integer::create($v2, MATH_INTEGER_GMP);
+$i3 = $i1->gcd($i2);
+echo "GMP gcd($v1, $v2): ".$i3->toString()."\n";
+$i3 = $i2->gcd($i1);
+echo "GMP gcd($v2, $v1): ".$i3->toString()."\n";
+
+$i1 = Math_Integer::create($v1, MATH_INTEGER_BCMATH);
+$i2 = Math_Integer::create($v2, MATH_INTEGER_BCMATH);
+$i3 = $i1->gcd($i2);
+echo "BCMATH gcd($v1, $v2): ".$i3->toString()."\n";
+$i3 = $i2->gcd($i1);
+echo "BCMATH gcd($v2, $v1): ".$i3->toString()."\n";
+
+$val = '30';
+$i1 = Math_Integer::create($val, MATH_INTEGER_GMP);
+echo "GMP int = ".$i1->toString()."\n";
+$err = $i1->fact();
+if($err == true) {
+    $fact1 = $i1->toString();
+    echo "GMP int! = $fact1\n";
 } else {
-    $i1 = new Math_Integer('33333');
-    $i2 = new Math_Integer('11111');
+    print_r($err);
 }
-$i3 = new Math_Integer(6);
+$i1 = Math_Integer::create($val, MATH_INTEGER_GMP);
+echo "BCMATH int = ".$i1->toString()."\n";
+$err = $i1->fact();
+if($err == true) {
+    $fact2 = $i1->toString();
+    echo "BCMATH int! = $fact2\n";
+} else {
+    print_r($err);
+}
 
-echo '* Using lib: '.MATH_INTLIB."\n";
-
-echo 'i1 = '.$i1->toString()."\n";
-echo 'i2 = '.$i2->toString()."\n";
-echo 'i3 = '.$i3->toString()."\n";
-
-$res = Math_IntegerOp::add($i1, $i2);
-echo 'i1 + i2 = '.$res->toString()."\n";
-
-$res = Math_IntegerOp::sub($i1, $i2);
-echo 'i1 - i2 = '.$res->toString()."\n";
-
-$res = Math_IntegerOp::sub($i2, $i1);
-echo 'i2 - i1 = '.$res->toString()."\n";
-
-$res = Math_IntegerOp::mul($i1, $i2);
-echo 'i1 * i2 = '.$res->toString()."\n";
-
-$res = Math_IntegerOp::div($i1, $i3);
-echo 'i1 / i3 = '.$res->toString()."\n";
-
-$res = Math_IntegerOp::mod($i2, $i3);
-echo 'i1 % i3 = '.$res->toString()."\n";
-
-$res = Math_IntegerOp::neg($i1);
-echo 'neg(i1) = '.$res->toString()."\n";
-
-echo 'sign(neg(i1)) = '.Math_IntegerOp::sign($res)."\n";
-echo 'sign(neg(0)) = '.Math_IntegerOp::sign(new Math_Integer(0))."\n";
-echo 'sign(i2) = '.Math_IntegerOp::sign($i2)."\n";
-
-echo 'compare(i1, i2) = '.Math_IntegerOp::compare($i1, $i2)."\n";
-echo 'compare(i3, i3) = '.Math_IntegerOp::compare($i3, $i3)."\n";
-echo 'compare(i2, i1) = '.Math_IntegerOp::compare($i2, $i1)."\n";
-
-$res = Math_IntegerOp::abs(Math_IntegerOp::neg($i2));
-echo 'abs(neg(i2)) = '.$res->toString()."\n";
+if (strcmp($fact1, $fact2) == 0) {
+    echo "** Both objects gave the same result\n";
+} else {
+    echo "** GMP and BCMATH gave different results\n";
+}
 
 // vim: ts=4:sw=4:et:
 // vim6: fdl=1:
