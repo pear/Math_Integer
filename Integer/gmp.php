@@ -157,7 +157,7 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
             return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
         }
         if ($int->isNegative()) {
-            return PEAR::raisError('Exponent cannot be negative');
+            return PEAR::raiseError('Exponent cannot be negative');
         } elseif ($int->isZero()) {
             $this->setValue(1);
         } else {
@@ -206,7 +206,7 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
         if ($this->isZero()) {
             return true;
         } elseif ($this->isNegative()) {
-            return PEAR::isError('Cannot take square root of a negative number');
+            return PEAR::raiseError('Cannot take square root of a negative number');
         } else {
             $newval = gmp_add($this->getValue(), $int->getValue());
             if (is_resource($newval)) {
