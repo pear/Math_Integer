@@ -175,6 +175,29 @@ $bad  = 1234;
 $foo = $int->add($bad);
 var_dump($foo);
 
+$gcd = '12341123342312422313245';
+echo "Fixed gcd: $gcd\n";
+$tmp1 = Math_Integer::create($gcd);
+$tmp2 = $tmp1->clone();
+$tmp1->mul(Math_Integer::create(3));
+$tmp2->mul(Math_Integer::create(5));
+$v1 = $tmp1->toString();
+$v2 = $tmp2->toString();
+
+$i1 = Math_Integer::create($v1, MATH_INTEGER_GMP);
+$i2 = Math_Integer::create($v2, MATH_INTEGER_GMP);
+$i3 = $i1->gcd($i2);
+echo "GMP gcd($v1, $v2): ".$i3->toString()."\n";
+$i3 = $i2->gcd($i1);
+echo "GMP gcd($v2, $v1): ".$i3->toString()."\n";
+
+$i1 = Math_Integer::create($v1, MATH_INTEGER_BCMATH);
+$i2 = Math_Integer::create($v2, MATH_INTEGER_BCMATH);
+$i3 = $i1->gcd($i2);
+echo "BCMATH gcd($v1, $v2): ".$i3->toString()."\n";
+$i3 = $i2->gcd($i1);
+echo "BCMATH gcd($v2, $v1): ".$i3->toString()."\n";
+
 // vim: ts=4:sw=4:et:
 // vim6: fdl=1:
 ?>

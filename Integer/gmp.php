@@ -243,6 +243,17 @@ class Math_Integer_GMP extends Math_Integer_Common {
 		return gmp_sign($this->getValue());
 	}
 
+	function gcd(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
+		}
+		$gcd = gmp_gcd($this->getValue(), $int->getValue());
+		if (!is_resource($gcd) || get_resource_type($gcd) != 'GMP integer') {
+			return PEAR::raiseError('Unkown error calculating GCD');
+		}
+		return new Math_Integer_GMP($gcd);
+	}
+
 	function isOdd() {
 		return gmp_mod($this->getValue(), gmp_init(2)) != 0;
 	}

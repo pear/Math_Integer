@@ -136,14 +136,14 @@ class Math_Integer_BCMATH extends Math_Integer_Common {
 		if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
 			$err = 'Modulus is not a Math_Integer_BCMATH object.';
 		} else {
-			if ($mod->isZero() || $int->isNegative()) {
+			if ($int->isZero() || $int->isNegative()) {
 				$err = 'Modulus object must be positive.';
 			}
 		}
 		if (!empty($err)) {
 			return PEAR::raiseError($err);
 		}
-		$newval = bcmod($this->getValue(), $int->getValue(), $mod->getValue());
+		$newval = bcmod($this->getValue(), $int->getValue());
 		$this->setValue($newval);
 		return true;
 	}
@@ -162,6 +162,38 @@ class Math_Integer_BCMATH extends Math_Integer_Common {
 			return 0;
 		} else {
 			return 1;
+		}
+	}
+
+	function &gcd(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+			$err = 'Modulus is not a Math_Integer_BCMATH object.';
+		}
+		// if both are the same, return either
+		if ($this->compare($int) == 0) {
+			return new Math_Integer_GMP($int);
+		}
+		$int1 = $this->clone();
+		$int2 = $int->clone();
+		// make sure both are positive
+		if ($int1->isNegative()) {
+			$int1->negate();
+		}
+		if ($int2->isNegative()) {
+			$int2->negate();
+		}
+		if ($int1->compare($int2) == -1) {
+			$tmp = $int1;
+			$int1 = $int2;
+			$int2 = $tmp;
+		}
+		$mod = $int1->mod($int2);
+		if (PEAR::isError($mod)) {
+			return $mod;
+		} elseif (!$int1->isZero()) {
+			return $int2->gcd($int1);
+		} else {
+			return $int2;
 		}
 	}
 

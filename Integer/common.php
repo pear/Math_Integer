@@ -66,7 +66,7 @@ class Math_Integer_Common {
 		return $this->_noImplemented('pow');
 	}
 
-	function sqrt(&$int) {
+	function sqrt() {
 		return $this->_noImplemented('sqrt');
 	}
 
@@ -80,6 +80,10 @@ class Math_Integer_Common {
 
 	function sign(&$int) {
 		return $this->_noImplemented('sign');
+	}
+
+	function &gcd(&$int) {
+		return $this->_noImplemented('gcd');
 	}
 
 	function isOdd() {
