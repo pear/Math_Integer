@@ -30,7 +30,11 @@ class Math_Integer_Common {
 		return $this->_noImplemented('negate');
 	}
 
-	function add($int) {
+	function abs() {
+		return $this->_noImplemented('abs');
+	}
+
+	function add(&$int) {
 		return $this->_noImplemented('add');
 	}
 
@@ -38,7 +42,7 @@ class Math_Integer_Common {
 		return $this->_noImplemented('inc');
 	}
 
-	function sub($int) {
+	function sub(&$int) {
 		return $this->_noImplemented('sub');
 	}
 
@@ -46,31 +50,62 @@ class Math_Integer_Common {
 		return $this->_noImplemented('dec');
 	}
 
-	function mul($int) {
+	function mul(&$int) {
 		return $this->_noImplemented('mul');
 	}
 
-	function div($int) {
+	function div(&$int) {
 		return $this->_noImplemented('div');
 	}
 
-	function pow($int) {
+	function pow(&$int) {
 		return $this->_noImplemented('pow');
 	}
 
-	function sqrt($int) {
+	function powmod(&$int) {
+		return $this->_noImplemented('pow');
+	}
+
+	function sqrt(&$int) {
 		return $this->_noImplemented('sqrt');
 	}
 
-	function mod($int) {
+	function mod(&$int) {
 		return $this->_noImplemented('mod');
 	}
 
-	function compare($int) {
+	function compare(&$int) {
 		return $this->_noImplemented('compare');
 	}
 
+	function sign(&$int) {
+		return $this->_noImplemented('sign');
+	}
+
+	function isOdd() {
+		return $this->_noImplemented('isOdd');
+	}
+
+	function isEven() {
+		return $this->_noImplemented('isEven');
+	}
+
+	function isPositive() {
+		return $this->_noImplemented('isPositive');
+	}
+
+	function isNegative() {
+		return $this->_noImplemented('isNegative');
+	}
+
+	function isZero() {
+		return $this->_noImplemented('isZero');
+	}
+
 	function _is(&$obj, $classname) {
+		if (!is_object($obj)) {
+			return false;
+		}
 		if (function_exists('is_a')) {
 			return is_a($obj, $classname);
 		} else {

@@ -1,8 +1,5 @@
 <?php
 //
-// vim: ts=4:sw=4:et:
-// vim6: fdl=1:
-//
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
 // +----------------------------------------------------------------------+
@@ -23,18 +20,6 @@
 //
 //
 include_once 'PEAR.php';
-
-// allow for user override of the integer library to use
-if (!defined('MATH_INTLIB')) {
-    if (extension_loaded('gmp')) {
-        define ('MATH_INTLIB', 'gmp');
-    } elseif (extension_loaded('bcmath')) {
-        define ('MATH_INTLIB', 'bcmath');
-        bcscale(0);
-    } else {
-        define ('MATH_INTLIB', 'standard');
-    }
-}
 
 define ('HAS_GMP', (boolean) extension_loaded('gmp'));
 define ('HAS_BCMATH', (boolean) extension_loaded('bcmath'));
@@ -190,4 +175,6 @@ $bad  = 1234;
 $foo = $int->add($bad);
 var_dump($foo);
 
+// vim: ts=4:sw=4:et:
+// vim6: fdl=1:
 ?>

@@ -13,12 +13,20 @@ class Math_Integer_GMP extends Math_Integer_Common {
 		return gmp_strval($this->_value);
 	}
 
-	function clone() {
+	function &clone() {
 		return new Math_Integer_GMP($this->toString());
 	}
 
 	function setValue($value) {
-		$this->_value = gmp_init($value);
+		if ($this->_is($value, 'Math_Integer_GMP')) {
+			$this->setValue($value->toString());
+		} elseif (is_resource($value) && get_resource_type($value) == 'GMP integer') {
+			$this->_value = $value;
+		} elseif (is_scalar($value)) {
+			$this->_value = gmp_init($value);
+		} else {
+			$this->_value = null;
+		}
 	}
 
 	function getValue() {
@@ -26,9 +34,20 @@ class Math_Integer_GMP extends Math_Integer_Common {
 	}
 
 	function negate() {
-		$val = gmp_mul($this->getValue(), gmp_init(-1));
-		if (is_resource($val)) {
-			$this->_value = $val;
+		$newval = gmp_neg($this->getValue());
+		if (is_resource($newval)) {
+			$this->setValue($newval);
+			return true;
+		} else {
+			return PEAR::raiseError('Error while negating Math_Integer_GMP '.
+									'object: '.$this->toString());
+		}
+	}
+
+	function abs() {
+		$newval = gmp_abs($this->getValue());
+		if (is_resource($newval)) {
+			$this->setValue($newval);
 			return true;
 		} else {
 			return PEAR::raiseError('Error while negating Math_Integer_GMP '.
@@ -40,9 +59,9 @@ class Math_Integer_GMP extends Math_Integer_Common {
 		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
 			return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
 		}
-		$val = gmp_add($this->getValue(), $int->getValue());
-		if (is_resource($val)) {
-			$this->_value = $val;
+		$newval = gmp_add($this->getValue(), $int->getValue());
+		if (is_resource($newval)) {
+			$this->setValue($newval);
 			return true;
 		} else {
 			return PEAR::raiseError('Error while adding Math_Integer_GMP '.
@@ -52,40 +71,199 @@ class Math_Integer_GMP extends Math_Integer_Common {
 	}
 
 	function inc() {
-		return $this->_noImplemented('inc');
+		$newval = gmp_add($this->getValue(), gmp_init(1));
+		if (is_resource($newval)) {
+			$this->setValue($newval);
+			return true;
+		} else {
+			return PEAR::raiseError('Error while incrementing Math_Integer_GMP '.
+									'object: '.$this->toString());
+		}
 	}
 
-	function sub($int) {
-		return $this->_noImplemented('sub');
+	function sub(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
+		}
+		$newval = gmp_sub($this->getValue(), $int->getValue());
+		if (is_resource($newval)) {
+			$this->setValue($newval);
+			return true;
+		} else {
+			return PEAR::raiseError('Error while substracting Math_Integer_GMP '.
+									'objects: '.$this->toString().' and '.
+									$int->toString());
+		}
 	}
 
 	function dec() {
-		return $this->_noImplemented('dec');
+		$newval = gmp_sub($this->getValue(), gmp_init(1));
+		if (is_resource($newval)) {
+			$this->setValue($newval);
+			return true;
+		} else {
+			return PEAR::raiseError('Error while decrementing Math_Integer_GMP '.
+									'object: '.$this->toString());
+		}
 	}
 
-	function mul($int) {
-		return $this->_noImplemented('mul');
+	function mul(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
+		}
+		$newval = gmp_mul($this->getValue(), $int->getValue());
+		if (is_resource($newval)) {
+			$this->setValue($newval);
+			return true;
+		} else {
+			return PEAR::raiseError('Error while multiplying Math_Integer_GMP '.
+									'objects: '.$this->toString().' and '.
+									$int->toString());
+		}
 	}
 
-	function div($int) {
+	function div(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
+		}
+		if ($int->isZero()) {
+			return PEAR::raiseError('Division by zero is undefined');
+		}
+		$newval = gmp_div($this->getValue(), $int->getValue());
+		if (is_resource($newval)) {
+			$this->setValue($newval);
+			return true;
+		} else {
+			return PEAR::raiseError('Error while dividing Math_Integer_GMP '.
+									'objects: '.$this->toString().' and '.
+									$int->toString());
+		}
 		return $this->_noImplemented('div');
 	}
 
-	function pow($int) {
-		return $this->_noImplemented('pow');
+	function pow(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
+		}
+		if ($int->isNegative()) {
+			return PEAR::raisError('Exponent cannot be negative');
+		} elseif ($int->isZero()) {
+			$this->setValue(1);
+		} else {
+			$newval = gmp_pow($this->getValue(), $int->toString());
+			if (is_resource($newval)) {
+				$this->setValue($newval);
+				return true;
+			} else {
+				return PEAR::raiseError('Error while doing pow($n, $e) Math_Integer_GMP '.
+										'objects: '.$this->toString().' and '.
+										$int->toString());
+			}
+		}
 	}
 
-	function sqrt($int) {
-		return $this->_noImplemented('sqrt');
+	function powmod(&$int, &$mod) {
+		$err = '';
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			$err .= 'Exponent is not a Math_Integer_GMP object.';
+		} elseif ($int->isNegative()) {
+			$err .= 'Exponent cannot be negative';
+		}
+		if (!is_empty($err)) {
+			$err .= ' ';
+		}
+		if (!$this->_is(&$mod, 'Math_Integer_GMP')) {
+			$err .= 'Modulus is not a Math_Integer_GMP object.';
+		} elseif ($mod->isZero() || $mod->isNegative()) {
+			$err .= 'Modulus must be positive and greater than zero';
+		}
+		if (!empty($err)) {
+			return PEAR::raiseError($err);
+		}
+		$newval = gmp_powm($this->getValue(), $int->getValue(), $mod->getValue());
+		if (is_resource($newval)) {
+			$this->setValue($newval);
+			return true;
+		} else {
+			return PEAR::raiseError('Error while doing pow(n, e, m) Math_Integer_GMP '.
+									'objects: '.$this->toString().', '.
+									$int->toString().', and '.$mod->toString());
+		}
 	}
 
-	function mod($int) {
-		return $this->_noImplemented('mod');
+	function sqrt() {
+		if ($this->isZero()) {
+			return true;
+		} elseif ($this->isNegative()) {
+			return PEAR::isError('Cannot take square root of a negative number');
+		} else {
+			$newval = gmp_add($this->getValue(), $int->getValue());
+			if (is_resource($newval)) {
+				$this->setValue($newval);
+				return true;
+			} else {
+				return PEAR::raiseError('Error while taking a square root of: '.
+										$this->toString());
+			}
+		}
 	}
 
-	function compare($int) {
-		return $this->_noImplemented('compare');
+	function mod(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			return PEAR::raiseError('Modulus is not a Math_Integer_GMP object');
+		} elseif ($int->isZero() || $int->isNegative()) {
+			return PEAR::raiseError('Modulus must be positive and greater than zero');
+		}
+		$newval = gmp_mod($this->getValue(), $int->getValue());
+		if (is_resource($newval)) {
+			$this->setValue($newval);
+			return true;
+		} else {
+			return PEAR::raiseError('Error while doing mod(i, m) using the '.
+									'objects: '.$this->toString().' and '.
+									$int->toString());
+		}
 	}
+
+	function compare(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
+		}
+		$cmp = gmp_cmp($this->getValue(), $int->getValue());
+		if ($cmp > 0) {
+			return 1; 
+		} elseif ($cmp == 0) {
+			return 0;
+		} else {
+			return -1;
+		}
+	}
+
+	function sign() {
+		return gmp_sign($this->getValue());
+	}
+
+	function isOdd() {
+		return gmp_mod($this->getValue(), gmp_init(2)) != 0;
+	}
+
+	function isEven() {
+		return gmp_mod($this->getValue(), gmp_init(2)) == 0;
+	}
+
+	function isPositive() {
+		return gmp_sign($this->getValue()) == 1;
+	}
+
+	function isNegative() {
+		return gmp_sign($this->getValue()) == -1;
+	}
+
+	function isZero() {
+		return gmp_sign($this->getValue()) == 0;
+	}
+
+
 }
 
 ?>
