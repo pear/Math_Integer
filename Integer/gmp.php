@@ -1,6 +1,7 @@
 <?php
 
-include_once 'Math/Integer/common.php';
+//include_once 'Math/Integer/common.php';
+include_once 'common.php';
 
 class Math_Integer_GMP extends Math_Integer_Common {
 	
@@ -25,11 +26,29 @@ class Math_Integer_GMP extends Math_Integer_Common {
 	}
 
 	function negate() {
-		return $this->_noImplemented('negate');
+		$val = gmp_mul($this->getValue(), gmp_init(-1));
+		if (is_resource($val)) {
+			$this->_value = $val;
+			return true;
+		} else {
+			return PEAR::raiseError('Error while negating Math_Integer_GMP '.
+									'object: '.$this->toString());
+		}
 	}
 
-	function add($int) {
-		return $this->_noImplemented('add');
+	function add(&$int) {
+		if (!$this->_is(&$int, 'Math_Integer_GMP')) {
+			return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
+		}
+		$val = gmp_add($this->getValue(), $int->getValue());
+		if (is_resource($val)) {
+			$this->_value = $val;
+			return true;
+		} else {
+			return PEAR::raiseError('Error while adding Math_Integer_GMP '.
+									'objects: '.$this->toString().' and '.
+									$int->toString());
+		}
 	}
 
 	function inc() {

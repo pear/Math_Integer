@@ -70,6 +70,14 @@ class Math_Integer_Common {
 		return $this->_noImplemented('compare');
 	}
 
+	function _is(&$obj, $classname) {
+		if (function_exists('is_a')) {
+			return is_a($obj, $classname);
+		} else {
+			return get_class($obj) == strtolower($classname);
+		}
+	}
+
 	function _notImplemented($func) {
 		return PEAR::raiseError("Method $func not implemented");
 	}

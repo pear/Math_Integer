@@ -1,4 +1,27 @@
 <?php
+//
+// vim: ts=4:sw=4:et:
+// vim6: fdl=1:
+//
+// +----------------------------------------------------------------------+
+// | PHP Version 4                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2003 The PHP Group                                |
+// +----------------------------------------------------------------------+
+// | This source file is subject to version 2.0 of the PHP license,       |
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available at through the world-wide-web at                           |
+// | http://www.php.net/license/2_02.txt.                                 |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Authors: Jesus M. Castagnetto <jmcastagnetto@php.net>                |
+// +----------------------------------------------------------------------+
+//
+// $Id$
+//
+//
 include_once 'PEAR.php';
 
 // allow for user override of the integer library to use
@@ -13,71 +36,158 @@ if (!defined('MATH_INTLIB')) {
     }
 }
 
-$_math_integer_valid_types = array('standard', 'gmp', 'bcmath');
+define ('HAS_GMP', (boolean) extension_loaded('gmp'));
+define ('HAS_BCMATH', (boolean) extension_loaded('bcmath'));
 
-class Math_Integer {
+define ('MATH_INTEGER_AUTO', 'auto');
+define ('MATH_INTEGER_STANDARD', 'standard');
+define ('MATH_INTEGER_BCMATH', 'bcmath');
+define ('MATH_INTEGER_GMP', 'gmp');
 
-	function &create($val, $type='auto') {
-		$value = Math_Integer::_toDecimalString($val);
-		if (PEAR::isError($value)) {
-			return $value;
-		}
-		if ($type == 'auto') {
-			$classFile = 'Math/Integer/'.MATH_INTLIB.'php';
-			$className = 'Math_Integer_'.ucfirst(MATH_INTLIB);
-		} elseif (in_array($type, $GLOBALS['_math_integer_valid_types'])) {
-			$classFile = "Math/Integer/{$type}.php";
-			$className = 'Math_Integer_'.ucfirst($type);
-			if(@include_once($classFile)) {
-				return new $className($value);
-			}
-		} else {
+$_math_integer_types = array(
+                MATH_INTEGER_STANDARD,
+                MATH_INTEGER_BCMATH,
+                MATH_INTEGER_GMP
+            );
+
+class Math_Integer {/*{{{*/
+
+	function &create($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
+		if ($type == MATH_INTEGER_AUTO || $type == null) { 
+            // decide what object to instantiate
+            $type = Math_Integer::_selectType();
+		} elseif (in_array($type, $GLOBALS['_math_integer_types'])) {
+            // make sure that the lib is available
+            if ($type == MATH_INTEGER_GMP && !HAS_GMP) {
+                return PEAR::raiseError('GMP libary missing, cannot create object');
+            } elseif ($type == MATH_INTEGER_BCMATH && !HAS_BCMATH) {
+                return PEAR::raiseError('BCMATH libary missing, cannot create object');
+            }
+		} else { // wrong type requested
 			return PEAR::raiseError('Invalid type. Expecting one of: auto, '.
 						 implode(', ', $GLOBALS['_math_integer_valid_types']));
 		}
-		// load the appropriate class file
+        //$classFile = "Math/Integer/{$type}.php";
+        $classFile = "./Integer/{$type}.php";
+        $className = 'Math_Integer_'.ucfirst($type);
+        // convert to a string representing an integer
+		$value = Math_Integer::_toIntegerString($val, $type, $truncate);
+		if (PEAR::isError($value)) {
+			$value->addUserInfo(array(
+						'class' => 'Math_Integer',
+						'method' => 'create',
+						'params' => array(
+								'val' => $val,
+								'type' => 'MATH_INTEGER_'.strtoupper($type),
+								'truncate' => ($truncate == false) ? 'false' : 'true'
+							)
+					));
+			return $value;
+		}
+		// load the appropriate class file and instantiate the object
 		if(@include_once($classFile)) {
 			return new $className($value);
 		} else {
 			return PEAR::raiseError("Error: could not find $classFile. Cannot ".
 									"instantiate $className object");
 		}
-	}
+	}/*}}}*/
 
-	function &createGMP() {
-		return Math_Integer::create($val, 'gmp');
-	}
+	function &createGMP($val, $truncate=false) {/*{{{*/
+		return Math_Integer::create($val, MATH_INTEGER_GMP, $truncate);
+	}/*}}}*/
 
-	function &createBCMATH() {
-		return Math_Integer::create($val, 'bcmath');
-	}
+	function &createBCMATH($val, $truncate=false) {/*{{{*/
+		return Math_Integer::create($val, MATH_INTEGER_BCMATH, $truncate);
+	}/*}}}*/
 
-	function &createStandard() {
-		return Math_Integer::create($val, 'standard');
-	}
+	function &createStandard($val, $truncate=false) {/*{{{*/
+		return Math_Integer::create($val, MATH_INTEGER_STANDARD, $truncate);
+	}/*}}}*/
 
-	function _toDecimalString($val) {
+	function _toIntegerString($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
 		$integerRE = '/^[[:digit:]]+$/';
-		$hexRE = '/^[[:xdigit:]]+$/';
-		$validFloatRE = '/^[[:digit:]]+\.0+$/';
+		$floatRE = '/^([[:digit:]]+)\.[[:digit:]]+$/';
+        $hexRE = '/^[[:xdigit:]]+$/';
 
-		if (preg_match($integerRE, $val)) {
+		if (preg_match($integerRE, $val)) { // integer
 			return strval($val);
-		} elseif (preg_match($validFloatRE, $val)) {
-			return strval(floor($val));
-		} elseif (preg_match($hexRE, $val)) {
-			// this is kludgy but sure to work
-			$hexs = explode("\n", chunk_split($val, 2, "\n"));
-			$value = 0.0;
-			foreach ($hexs as $hex) {
-				$value += floatval(hexdec($hex));
+        } elseif (preg_match($hexRE, $val)) { // hexadecimal
+            // if automatic selection, set correct type
+            if ($type == MATH_INTEGER_AUTO) {
+                $type = Math_Integer::_selectType();
+            }
+            $len = strlen(trim($val));
+            $value = 0;
+            if ($type == MATH_INTEGER_GMP) {
+                for ($i = 0; $i < $len; $i++) {
+                    $c = substr($val, ($len - 1 - $i), 1);
+                    $value = gmp_add($value, gmp_mul(hexdec($c),gmp_pow(16,$i)));
+                }
+                return gmp_strval($value);
+            } elseif ($type == MATH_INTEGER_BCMATH) { 
+                for ($i = 0; $i < $len; $i++) {
+                    $c = substr($val, ($len - 1 - $i), 1);
+                    $value = bcadd($value, bcmul(hexdec($c),bcpow(16,$i)));
+                }
+                return $value;
+            } else { // return PEAR_Error for now
+                return PEAR::raiseError('GMP or BCMATH support needed to '.
+                                        'process hexadecimal integers');
+            }
+		} elseif (preg_match($floatRE, $val, $reg)) { // float
+			if ($truncate) {
+				return strval($reg[1]);
+			} else {
+				return PEAR::raiseError('Not an integer. For truncation '.
+							'of a floating point number set $truncate=true');
 			}
-			return strval(floor($value));
 		} else {
-			return PEAR::raisError("Invalid value: $val does not represent an integer");
+			return PEAR::raiseError("Invalid value: $val does not represent an integer");
 		}
-	}
-}
+	}/*}}}*/
 
+    function _selectType() {/*{{{*/
+        if (HAS_GMP) {
+            $selectedType = MATH_INTEGER_GMP;
+        } elseif (HAS_BCMATH) {
+            $selectedType = MATH_INTEGER_BCMATH;
+        } else {
+            $selectedType = MATH_INTEGER_STANDARD;
+        }
+        return $selectedType;
+    }/*}}}*/
+    
+}/* end of Math_Integer }}}*/
+
+$h = '012346789abcdef';
+echo "INPUT: $h\n";
+echo Math_Integer::_toIntegerString($h)."\n\n"; 
+
+$h = 'efaaffadadfadad11234dfaed9002123346678878';
+echo "INPUT: $h\n";
+echo Math_Integer::_toIntegerString($h)."\n\n"; 
+
+$f = '22331242343213222231423234234234234234234111232123.0000000';
+echo "INPUT: $f\n";
+echo Math_Integer::_toIntegerString($f, MATH_INTEGER_AUTO, true)."\n\n"; 
+
+$f = '22331242343213222231423234234234234234234111232123.1';
+echo "INPUT: $f\n";
+print_r(Math_Integer::_toIntegerString($f)); 
+echo Math_Integer::_toIntegerString($f, MATH_INTEGER_AUTO, true)."\n"; 
+
+$int = Math_Integer::create($f, MATH_INTEGER_GMP, true);
+$hint = Math_Integer::create($h, MATH_INTEGER_GMP, true);
+print_r($int);
+echo 'Math_Integer_GMP: '.$int->toString()."\n";
+print_r($hint);
+echo 'Math_Integer_GMP: '.$hint->toString()."\n";
+$foo = $int->add($hint);
+var_dump($foo);
+echo 'Adding int to hint: '.$int->toString()."\n";
+$bad  = 1234;
+$foo = $int->add($bad);
+var_dump($foo);
 
 ?>
