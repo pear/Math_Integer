@@ -29,7 +29,7 @@ include_once 'Math/Integer.php';
  * The operations are implemented as static methods of the class.
  *
  * @author  Jesus M. Castagnetto <jmcastagnetto@php.net>
- * @version 0.8
+ * @version 0.9
  * @access  public
  * @package Math_Integer
  */
@@ -45,6 +45,81 @@ class Math_IntegerOp {/*{{{*/
     function isInteger(&$int) {/*{{{*/
         return get_class($int) != 'math_integer_common' 
                 && is_subclass_of($int, 'math_integer_common');
+    }/*}}}*/
+
+    /**
+     * Checks if the Math_Integer object is Odd
+     *
+     * @param object Math_Integer $int1
+     * @return mixed TRUE if Math_Integer object is odd, FALSE if it is not, PEAR_Error on error.
+     * @access public
+     */
+    function isOdd(&$int) {/*{{{*/
+        $err = Math_IntegerOp::_validInt($int);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $int->isOdd();
+    }/*}}}*/
+
+    /**
+     * Checks if the Math_Integer object is even
+     *
+     * @param object Math_Integer $int1
+     * @return mixed TRUE if Math_Integer object is even, FALSE if it is not, PEAR_Error on error.
+     * @access public
+     */
+    function isEven(&$int) {/*{{{*/
+        $err = Math_IntegerOp::_validInt($int);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $int->isEven();
+    }/*}}}*/
+
+    /**
+     * Checks if the Math_Integer object is positive
+     *
+     * @param object Math_Integer $int1
+     * @return mixed TRUE if Math_Integer object is positive, FALSE if it is not, PEAR_Error on error.
+     * @access public
+     */
+    function isPositive(&$int) {/*{{{*/
+        $err = Math_IntegerOp::_validInt($int);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $int->isPositive();
+    }/*}}}*/
+
+    /**
+     * Checks if the Math_Integer object is negative
+     *
+     * @param object Math_Integer $int1
+     * @return mixed TRUE if Math_Integer object is negative, FALSE if it is not, PEAR_Error on error.
+     * @access public
+     */
+    function isNegative(&$int) {/*{{{*/
+        $err = Math_IntegerOp::_validInt($int);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $int->isNegative();
+    }/*}}}*/
+
+    /**
+     * Checks if the Math_Integer object is zero
+     *
+     * @param object Math_Integer $int1
+     * @return mixed TRUE if Math_Integer object is zero, FALSE if it is not, PEAR_Error on error.
+     * @access public
+     */
+    function isZero(&$int) {/*{{{*/
+        $err = Math_IntegerOp::_validInt($int);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $int->isZero();
     }/*}}}*/
 
     /**
@@ -165,6 +240,22 @@ class Math_IntegerOp {/*{{{*/
             return $err;
         }
         return $res;
+    }/*}}}*/
+
+    /**
+     * Calculates the GCD of 2 Math_Integer objects
+     *
+     * @param object Math_Integer $int1
+     * @param object Math_Integer $int2
+     * @return mixed and integer on success, PEAR_Error otherwise
+     * @access public
+     * @see Math_IntegerOp::sign
+     */
+    function &gcd(&$int1, &$int2) {/*{{{*/
+        if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
+            return $err;
+        }
+        return $int1->gcd($int2);
     }/*}}}*/
 
     /**

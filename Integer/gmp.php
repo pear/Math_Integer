@@ -285,7 +285,7 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
         return gmp_sign($this->getValue()) == 0;
     }/*}}}*/
 
-    function probPrime($reps=10) {/*{{{*/
+    function isPrime($reps=10) {/*{{{*/
         if (!is_int($reps)) {
             return PEAR::raiseError('Expecting an integer for the number of repeats');
         }

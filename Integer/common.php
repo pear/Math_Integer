@@ -110,7 +110,7 @@ class Math_Integer_Common {/*{{{*/
         return $this->_noImplemented('isZero');
     }/*}}}*/
 
-    function probPrime($reps) {/*{{{*/
+    function isPrime($reps) {/*{{{*/
         return $this->_noImplemented('probPrime');
     }/*}}}*/
 
