@@ -39,7 +39,7 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
 
     function fact() {/*{{{*/
         if ($this->isNegative()) {
-            return PEAR::isError('Factorial of a negative number is undefined');
+            return PEAR::raiseError('Factorial of a negative number is undefined');
         }
         if ($this->isZero()) {
             $this->setValue(1);
