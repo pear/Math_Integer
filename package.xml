@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE package SYSTEM "../package.dtd">
+<!-- do not use the "Type" attribute here, that one is only for
+     generated package.xml files -->
+<!-- $Id: package.xml,v 1.1 2003-01-02 01:55:05 jmcastagnetto Exp $ -->
+<package>
+
+  <name>Math_Integer</name>
+  <summary>Package to represent and manipulate integers</summary>
+  <description>
+   The class Math_Integer can represent integers bigger than the
+   signed longs that are the default of PHP, if either the GMP or
+   the BCMATH (bundled with PHP) are present. Otherwise it will fall
+   back to the internal integer representation.
+   The Math_IntegerOp class defines operations on Math_Integer objects.
+  </description>
+
+  <maintainers>
+    <maintainer>
+      <user>jmcastagnetto</user>
+      <name>Jesus M. Castagnetto</name>
+      <email>jmcastagnetto@php.net</email>
+      <role>lead</role>
+    </maintainer>
+  </maintainers>
+
+  <release>
+    <license>PHP</license>
+    <version>0.8</version>
+    <date>2002-12-31</date>
+    <notes>
+       Initial release under PEAR.
+    </notes>
+    <state>stable</state>
+    <filelist>
+      <dir name="/" baseinstalldir="Math">
+       <file role="php">Integer.php</file>
+       <file role="php">IntegerOp.php</file>
+       <dir name="test" role="test">
+        <file role="php">testMath_Integer.php</file>
+       </dir>
+      </dir>
+    </filelist>
+  </release>
+  <changelog>
+    <release>
+    </release>
+  </changelog>
+</package>
