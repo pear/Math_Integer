@@ -1,5 +1,8 @@
 <?php
 
+// $Id$
+// Example of use of Math_Integer
+
 echo date('\* r')."\n";
 echo '* PHP version: '.phpversion()."\n";
 echo '* Zend version: '.zend_version()."\n";
