@@ -121,7 +121,7 @@ class Math_Integer_Common {/*{{{*/
         if (function_exists('is_a')) {
             return is_a($obj, $classname);
         } else {
-            return get_class($obj) == strtolower($classname);
+            return strtolower(get_class($obj)) == strtolower($classname);
         }
     }/*}}}*/
 

@@ -43,7 +43,7 @@ class Math_IntegerOp {/*{{{*/
      * @access public
      */
     function isInteger(&$int) {/*{{{*/
-        return get_class($int) != 'math_integer_common' 
+        return strtolower(get_class($int)) != 'math_integer_common' 
                 && is_subclass_of($int, 'math_integer_common');
     }/*}}}*/
 
