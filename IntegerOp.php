@@ -42,13 +42,9 @@ class Math_IntegerOp {/*{{{*/
      * @return boolean TRUE if parameter is an instance of Math_Integer, FALSE otherwise
      * @access public
      */
-    function isMath_Integer(&$int) {/*{{{*/
-        if (function_exists('is_a')) {
-            return is_a($int, 'Math_Integer');
-        } else {
-            return get_class($int) == 'math_integer' 
-                    || is_subclass_of($int, 'math_integer');
-        }
+    function isInteger(&$int) {/*{{{*/
+        return get_class($int) != 'math_integer_common' 
+                && is_subclass_of($int, 'math_integer_common');
     }/*}}}*/
 
     /**
@@ -63,18 +59,12 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_add($int1->getValue(), $int2->getValue()));
-                break;
-            case 'bcmath' :
-                $tmp = bcadd($int1->getValue(), $int2->getValue());
-                break;
-            case 'std' :
-                $tmp = $int1->getValue() + $int2->getValue(); 
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->add($int2);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -89,18 +79,12 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_sub($int1->getValue(), $int2->getValue()));
-                break;
-            case 'bcmath' :
-                $tmp = bcsub($int1->getValue(), $int2->getValue());
-                break;
-            case 'std' :
-                $tmp = $int1->getValue() - $int2->getValue(); 
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->sub($int2);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -115,18 +99,12 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_mul($int1->getValue(), $int2->getValue()));
-                break;
-            case 'bcmath' :
-                $tmp = bcmul($int1->getValue(), $int2->getValue());
-                break;
-            case 'std' :
-                $tmp = $int1->getValue() * $int2->getValue(); 
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->mul($int2);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -141,18 +119,12 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_div($int1->getValue(), $int2->getValue()));
-                break;
-            case 'bcmath' :
-                $tmp = bcdiv($int1->getValue(), $int2->getValue());
-                break;
-            case 'std' :
-                $tmp = intval($int1->getValue() / $int2->getValue()); 
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->div($int2);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -167,18 +139,12 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_mod($int1->getValue(), $int2->getValue()));
-                break;
-            case 'bcmath' :
-                $tmp = bcmod($int1->getValue(), $int2->getValue());
-                break;
-            case 'std' :
-                $tmp = $int1->getValue() % $int2->getValue(); 
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->mod($int2);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -193,18 +159,12 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_pow($int1->getValue(), (int) $int2->toString()));
-                break;
-            case 'bcmath' :
-                $tmp = bcpow($int1->getValue(), $int2->getValue());
-                break;
-            case 'std' :
-                $tmp = pow($int1->getValue(), $int2->getValue()); 
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->pow($int2);
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -223,18 +183,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $cmp = gmp_cmp($int1->getValue(), $int2->getValue());
-                break;
-            case 'bcmath' :
-                $cmp = bccomp($int1->getValue(), $int2->getValue());
-                break;
-            case 'std' :
-                $cmp = $int1->getValue() - $int2->getValue(); 
-                break;
-        }/*}}}*/
-        return Math_IntegerOp::sign(new Math_Integer($cmp));
+        return $int1->compare($int2);
     }/*}}}*/
 
     /**
@@ -251,22 +200,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                return gmp_sign($int1->getValue());
-                break;
-            case 'bcmath' :
-            case 'std' :
-                $tmp = $int1->getValue();
-                if ($tmp > 0) {
-                    return 1;
-                } elseif ($tmp < 0) {
-                    return -1;
-                } else { // $tmp == 0
-                    return 0;
-                }
-                break;
-        }/*}}}*/
+        return $int1->sign();
     }/*}}}*/
 
     /**
@@ -276,22 +210,16 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &neg(&$int1) {/*{{{*/
+    function &negate(&$int1) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_neg($int1->getValue()));
-                break;
-            case 'bcmath' :
-                $tmp = bcmul(-1, $int1->getValue());
-                break;
-            case 'std' :
-                $tmp = -1 * $int1->getValue();
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->negate();
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -305,18 +233,12 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_sqrt($int1->getValue()));
-                break;
-            case 'bcmath' :
-                $tmp = bcsqrt(-1, $int1->getValue());
-                break;
-            case 'std' :
-                $tmp = intval(sqrt($int1->getValue()));
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->sqrt();
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -330,22 +252,12 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
-        switch (MATH_INTLIB) {/*{{{*/
-            case 'gmp' :
-                $tmp = gmp_strval(gmp_abs($int1->getValue()));
-                break;
-            case 'bcmath' :
-                if ($int1->getValue() < 0) {
-                    $tmp = bcmul(-1, $int1->getValue());
-                } else {
-                    $tmp = $int1->getValue();
-                }
-                break;
-            case 'std' :
-                $tmp = abs($int1->getValue());
-                break;
-        }/*}}}*/
-        return new Math_Integer($tmp);
+        $res = $int1->clone();
+        $err = $res->abs();
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        return $res;
     }/*}}}*/
 
     /**
@@ -386,10 +298,10 @@ class Math_IntegerOp {/*{{{*/
      */
     function _validInt(&$int1) {/*{{{*/
         $error = '';
-        if (!Math_IntegerOp::isMath_Integer($int1)) {
-            $error = 'Is not a Math_Integer object.';
-        } elseif (!$int1->initialized()) {
-            $error = 'Math_Integer object is uninitalized.';
+        if (!Math_IntegerOp::isInteger($int1)) {
+            $error = 'Is not an Integer object.';
+        } elseif (is_null($int1->getValue())) {
+            $error = 'Integer object is uninitalized.';
         }
         if (!empty($error)) {
             return PEAR::raiseError($error);
