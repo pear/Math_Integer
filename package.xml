@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE package SYSTEM "../package.dtd">
+<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
 <!-- do not use the "Type" attribute here, that one is only for
      generated package.xml files -->
-<!-- $Id: package.xml,v 1.1 2003-01-02 01:55:05 jmcastagnetto Exp $ -->
+<!-- $Id: package.xml,v 1.2 2003-07-12 08:02:00 mj Exp $ -->
 <package>
 
   <name>Math_Integer</name>
