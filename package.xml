@@ -1,49 +1,72 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE package SYSTEM "http://pear.php.net/dtd/package-1.0">
-<!-- do not use the "Type" attribute here, that one is only for
-     generated package.xml files -->
-<!-- $Id: package.xml,v 1.2 2003-07-12 08:02:00 mj Exp $ -->
-<package>
-
-  <name>Math_Integer</name>
-  <summary>Package to represent and manipulate integers</summary>
-  <description>
-   The class Math_Integer can represent integers bigger than the
-   signed longs that are the default of PHP, if either the GMP or
-   the BCMATH (bundled with PHP) are present. Otherwise it will fall
-   back to the internal integer representation.
-   The Math_IntegerOp class defines operations on Math_Integer objects.
-  </description>
-
-  <maintainers>
-    <maintainer>
-      <user>jmcastagnetto</user>
-      <name>Jesus M. Castagnetto</name>
-      <email>jmcastagnetto@php.net</email>
-      <role>lead</role>
-    </maintainer>
-  </maintainers>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Math_Integer</name>
+ <channel>pear.php.net</channel>
+ <summary>Package to represent and manipulate integers</summary>
+ <description>The class Math_Integer can represent integers bigger than the
+signed longs that are the default of PHP, if either the GMP or
+the BCMATH (bundled with PHP) are present. Otherwise it will fall
+back to the internal integer representation.
+The Math_IntegerOp class defines operations on Math_Integer objects.
+ </description>
+ <lead>
+  <name>Jesus M. Castagnetto</name>
+  <user>jmcastagnetto</user>
+  <email>jmcastagnetto@php.net</email>
+  <active>no</active>
+ </lead>
+ <date>2010-10-02</date>
+ <time>22:32:18</time>
+ <version>
+  <release>0.8.0</release>
+  <api>0.8.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP</license>
+ <notes>
+Initial release under PEAR.
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <dir name="test">
+    <file baseinstalldir="Math" name="testMath_Integer.php" role="php" />
+   </dir> <!-- //test -->
+   <file baseinstalldir="Math" name="Integer.php" role="php" />
+   <file baseinstalldir="Math" name="IntegerOp.php" role="php" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.0.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
   <release>
-    <license>PHP</license>
-    <version>0.8</version>
-    <date>2002-12-31</date>
-    <notes>
-       Initial release under PEAR.
-    </notes>
-    <state>stable</state>
-    <filelist>
-      <dir name="/" baseinstalldir="Math">
-       <file role="php">Integer.php</file>
-       <file role="php">IntegerOp.php</file>
-       <dir name="test" role="test">
-        <file role="php">testMath_Integer.php</file>
-       </dir>
-      </dir>
-    </filelist>
+   <version>
+    <release />
+    <api />
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2010-10-02</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>
+no release notes
+   </notes>
   </release>
-  <changelog>
-    <release>
-    </release>
-  </changelog>
+ </changelog>
 </package>
