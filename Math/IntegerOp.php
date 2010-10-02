@@ -134,7 +134,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->add($int2);
         if (PEAR::isError($err)) {
             return $err;
@@ -154,7 +154,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->sub($int2);
         if (PEAR::isError($err)) {
             return $err;
@@ -174,7 +174,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->mul($int2);
         if (PEAR::isError($err)) {
             return $err;
@@ -194,7 +194,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->div($int2);
         if (PEAR::isError($err)) {
             return $err;
@@ -214,7 +214,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->mod($int2);
         if (PEAR::isError($err)) {
             return $err;
@@ -234,7 +234,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->pow($int2);
         if (PEAR::isError($err)) {
             return $err;
@@ -305,7 +305,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->negate();
         if (PEAR::isError($err)) {
             return $err;
@@ -324,7 +324,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->sqrt();
         if (PEAR::isError($err)) {
             return $err;
@@ -343,7 +343,7 @@ class Math_IntegerOp {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
-        $res = $int1->clone();
+        $res = $int1->makeClone();
         $err = $res->abs();
         if (PEAR::isError($err)) {
             return $err;

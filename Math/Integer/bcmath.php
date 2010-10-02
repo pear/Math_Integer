@@ -10,7 +10,7 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         $this->setValue($value);
     }/*}}}*/
 
-    function &clone() {/*{{{*/
+    function makeClone() {/*{{{*/
         return new Math_Integer_BCMATH($this->toString());
     }/*}}}*/
 
@@ -192,8 +192,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         if ($this->compare($int) == 0) {
             return new Math_Integer_GMP($int);
         }
-        $int1 = $this->clone();
-        $int2 = $int->clone();
+        $int1 = $this->makeClone();
+        $int2 = $int->makeClone();
         // make sure both are positive
         if ($int1->isNegative()) {
             $int1->negate();

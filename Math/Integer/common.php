@@ -14,7 +14,7 @@ class Math_Integer_Common {/*{{{*/
         return strval($this->_value);
     }/*}}}*/
 
-    function clone() {/*{{{*/
+    function makeClone() {/*{{{*/
         return new Math_Integer_Common($this->toString());
     }/*}}}*/
 

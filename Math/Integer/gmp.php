@@ -13,7 +13,7 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
         return gmp_strval($this->_value);
     }/*}}}*/
 
-    function &clone() {/*{{{*/
+    function makeClone() {/*{{{*/
         return new Math_Integer_GMP($this->toString());
     }/*}}}*/
 

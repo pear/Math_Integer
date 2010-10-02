@@ -37,66 +37,66 @@ $_math_integer_types = array(
 
 class Math_Integer {/*{{{*/
 
-	function &create($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
-		if ($type == MATH_INTEGER_AUTO || $type == null) { 
+    function &create($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
+        if ($type == MATH_INTEGER_AUTO || $type == null) { 
             // decide what object to instantiate
             $type = Math_Integer::_selectType();
-		} elseif (in_array($type, $GLOBALS['_math_integer_types'])) {
+        } elseif (in_array($type, $GLOBALS['_math_integer_types'])) {
             // make sure that the lib is available
             if ($type == MATH_INTEGER_GMP && !HAS_GMP) {
                 return PEAR::raiseError('GMP libary missing, cannot create object');
             } elseif ($type == MATH_INTEGER_BCMATH && !HAS_BCMATH) {
                 return PEAR::raiseError('BCMATH libary missing, cannot create object');
             }
-		} else { // wrong type requested
-			return PEAR::raiseError('Invalid type. Expecting one of: auto, '.
-						 implode(', ', $GLOBALS['_math_integer_valid_types']));
-		}
-        //$classFile = "Math/Integer/{$type}.php";
-        $classFile = "./Integer/{$type}.php";
+        } else { // wrong type requested
+            return PEAR::raiseError('Invalid type. Expecting one of: auto, '.
+                         implode(', ', $GLOBALS['_math_integer_valid_types']));
+        }
+        $classFile = "Math/Integer/{$type}.php";
         $className = 'Math_Integer_'.ucfirst($type);
         // convert to a string representing an integer
-		$value = Math_Integer::_toIntegerString($val, $type, $truncate);
-		if (PEAR::isError($value)) {
-			$value->addUserInfo(array(
-						'class' => 'Math_Integer',
-						'method' => 'create',
-						'params' => array(
-								'val' => $val,
-								'type' => 'MATH_INTEGER_'.strtoupper($type),
-								'truncate' => ($truncate == false) ? 'false' : 'true'
-							)
-					));
-			return $value;
-		}
-		// load the appropriate class file and instantiate the object
-		if(@include_once($classFile)) {
-			return new $className($value);
-		} else {
-			return PEAR::raiseError("Error: could not find $classFile. Cannot ".
-									"instantiate $className object");
-		}
-	}/*}}}*/
+        $value = Math_Integer::_toIntegerString($val, $type, $truncate);
+        if (PEAR::isError($value)) {
+            $value->addUserInfo(array(
+                        'class' => 'Math_Integer',
+                        'method' => 'create',
+                        'params' => array(
+                                'val' => $val,
+                                'type' => 'MATH_INTEGER_'.strtoupper($type),
+                                'truncate' => ($truncate == false) ? 'false' : 'true'
+                            )
+                    ));
+            return $value;
+        }
+        // load the appropriate class file and instantiate the object
+        if (include_once($classFile)) {
+            $object = new $className($value);
+            return $object;
+        } else {
+            return PEAR::raiseError("Error: could not find $classFile. Cannot ".
+                                    "instantiate $className object");
+        }
+    }/*}}}*/
 
-	function &createGMP($val, $truncate=false) {/*{{{*/
-		return Math_Integer::create($val, MATH_INTEGER_GMP, $truncate);
-	}/*}}}*/
+    function &createGMP($val, $truncate=false) {/*{{{*/
+        return Math_Integer::create($val, MATH_INTEGER_GMP, $truncate);
+    }/*}}}*/
 
-	function &createBCMATH($val, $truncate=false) {/*{{{*/
-		return Math_Integer::create($val, MATH_INTEGER_BCMATH, $truncate);
-	}/*}}}*/
+    function &createBCMATH($val, $truncate=false) {/*{{{*/
+        return Math_Integer::create($val, MATH_INTEGER_BCMATH, $truncate);
+    }/*}}}*/
 
-	function &createStandard($val, $truncate=false) {/*{{{*/
-		return Math_Integer::create($val, MATH_INTEGER_STANDARD, $truncate);
-	}/*}}}*/
+    function &createStandard($val, $truncate=false) {/*{{{*/
+        return Math_Integer::create($val, MATH_INTEGER_STANDARD, $truncate);
+    }/*}}}*/
 
-	function _toIntegerString($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
-		$integerRE = '/^[[:digit:]]+$/';
-		$floatRE = '/^([[:digit:]]+)\.[[:digit:]]+$/';
+    function _toIntegerString($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
+        $integerRE = '/^[[:digit:]]+$/';
+        $floatRE = '/^([[:digit:]]+)\.[[:digit:]]+$/';
         $hexRE = '/^[[:xdigit:]]+$/';
 
-		if (preg_match($integerRE, $val)) { // integer
-			return strval($val);
+        if (preg_match($integerRE, $val)) { // integer
+            return strval($val);
         } elseif (preg_match($hexRE, $val)) { // hexadecimal
             // if automatic selection, set correct type
             if ($type == MATH_INTEGER_AUTO) {
@@ -120,17 +120,17 @@ class Math_Integer {/*{{{*/
                 return PEAR::raiseError('GMP or BCMATH support needed to '.
                                         'process hexadecimal integers');
             }
-		} elseif (preg_match($floatRE, $val, $reg)) { // float
-			if ($truncate) {
-				return strval($reg[1]);
-			} else {
-				return PEAR::raiseError('Not an integer. For truncation '.
-							'of a floating point number set $truncate=true');
-			}
-		} else {
-			return PEAR::raiseError("Invalid value: $val does not represent an integer");
-		}
-	}/*}}}*/
+        } elseif (preg_match($floatRE, $val, $reg)) { // float
+            if ($truncate) {
+                return strval($reg[1]);
+            } else {
+                return PEAR::raiseError('Not an integer. For truncation '.
+                            'of a floating point number set $truncate=true');
+            }
+        } else {
+            return PEAR::raiseError("Invalid value: $val does not represent an integer");
+        }
+    }/*}}}*/
 
     function _selectType() {/*{{{*/
         if (HAS_GMP) {
