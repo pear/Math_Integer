@@ -48,7 +48,7 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
             $fact = 1;
             $val = $this->getValue();
             while (bccomp($val, 1) != 0) {
-                $fact = bcmul($fac, $val);
+                $fact = bcmul($fact, $val);
                 $val = bcsub($val, 1);
             }
             $this->setValue($fact);

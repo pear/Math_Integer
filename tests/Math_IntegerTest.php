@@ -9,43 +9,58 @@ class Math_IntegerTest extends PHPUnit_Framework_TestCase {
         if (!extension_loaded('gmp')) {
             $this->markTestSkipped( "Missing gmp extension");
         }
+
+        $this->int = Math_Integer::create('22331242343213222231423234234234234234234111232123.1', MATH_INTEGER_GMP, true);
+        $this->hint = Math_Integer::create('efaaffadadfadad11234dfaed9002123346678878', MATH_INTEGER_GMP, true);
+    }
+
+    public function testToIntegerString1() {
+        $this->assertSame("5124168876805615", Math_Integer::_toIntegerString('012346789abcdef')); 
+    }
+
+    public function testToIntegerString2() {
+        $this->assertSame("21892195098298702144417118276090206103627679369336", Math_Integer::_toIntegerString('efaaffadadfadad11234dfaed9002123346678878')); 
+    }
+
+    public function testToIntegerString3() {
+        $this->assertSame('22331242343213222231423234234234234234234111232123', Math_Integer::_toIntegerString('22331242343213222231423234234234234234234111232123.0000000', MATH_INTEGER_AUTO, true)); 
+
+    }
+
+    public function testToIntegerString4() {
+        $result = Math_Integer::_toIntegerString('22331242343213222231423234234234234234234111232123.1'); 
+
+        $this->assertTrue(PEAR::isError($result));
+    }
+
+    public function testToIntegerString5() {
+        $this->assertSame('22331242343213222231423234234234234234234111232123', Math_Integer::_toIntegerString('22331242343213222231423234234234234234234111232123.1', MATH_INTEGER_AUTO, true)); 
+    }
+
+    public function testToString1() {
+        $this->assertSame('22331242343213222231423234234234234234234111232123', $this->int->toString());
+    }
+
+    public function testToString2() {
+        $this->assertSame('21892195098298702144417118276090206103627679369336', $this->hint->toString());
+    }
+
+    public function testAdd1() {
+        $this->int->add($this->hint);
+
+        $this->assertSame("44223437441511924375840352510324440337861790601459", $this->int->toString(), "Failed to correctly add");
+    }
+
+    public function testAdd2() {
+        $result = $this->int->add($foo = "1234");
+
+        $this->assertTrue(PEAR::isError($result));
     }
 
 
-    public function test() {
-        // Old test coverage - who knows what the expected results are.
-        $h = '012346789abcdef';
-        echo "INPUT: $h\n";
-        echo Math_Integer::_toIntegerString($h)."\n\n"; 
-
-        $h = 'efaaffadadfadad11234dfaed9002123346678878';
-        echo "INPUT: $h\n";
-        echo Math_Integer::_toIntegerString($h)."\n\n"; 
-
-        $f = '22331242343213222231423234234234234234234111232123.0000000';
-        echo "INPUT: $f\n";
-        echo Math_Integer::_toIntegerString($f, MATH_INTEGER_AUTO, true)."\n\n"; 
-
-        $f = '22331242343213222231423234234234234234234111232123.1';
-        echo "INPUT: $f\n";
-        print_r(Math_Integer::_toIntegerString($f)); 
-        echo Math_Integer::_toIntegerString($f, MATH_INTEGER_AUTO, true)."\n"; 
-
-        $int = Math_Integer::create($f, MATH_INTEGER_GMP, true);
-        $hint = Math_Integer::create($h, MATH_INTEGER_GMP, true);
-        print_r($int);
-        echo 'Math_Integer_GMP: '.$int->toString()."\n";
-        print_r($hint);
-        echo 'Math_Integer_GMP: '.$hint->toString()."\n";
-        $foo = $int->add($hint);
-        var_dump($foo);
-        echo 'Adding int to hint: '.$int->toString()."\n";
-        $bad  = 1234;
-        $foo = $int->add($bad);
-        var_dump($foo);
-  
+    public function testGcd() {
         $gcd = '12341123342312422313245';
-        echo "Fixed gcd: $gcd\n";
+
         $tmp1 = Math_Integer::create($gcd);
         $tmp2 = $tmp1->makeClone();
         $tmp1->mul(Math_Integer::create(3));
@@ -55,37 +70,41 @@ class Math_IntegerTest extends PHPUnit_Framework_TestCase {
 
         $i1 = Math_Integer::create($v1, MATH_INTEGER_GMP);
         $i2 = Math_Integer::create($v2, MATH_INTEGER_GMP);
+
         $i3 = $i1->gcd($i2);
-        echo "GMP gcd($v1, $v2): ".$i3->toString()."\n";
+        $this->assertSame("12341123342312422313245", $i3->toString(), "GMP gcd($v1, $v2)");
+
         $i3 = $i2->gcd($i1);
-        echo "GMP gcd($v2, $v1): ".$i3->toString()."\n";
+        $this->assertSame("12341123342312422313245", $i3->toString(), "GMP gcd($v2, $v1)");
+
 
         $i1 = Math_Integer::create($v1, MATH_INTEGER_BCMATH);
         $i2 = Math_Integer::create($v2, MATH_INTEGER_BCMATH);
         $i3 = $i1->gcd($i2);
-        echo "BCMATH gcd($v1, $v2): ".$i3->toString()."\n";
+        $this->assertSame("12341123342312422313245", $i3->toString(), "BCMATH gcd($v1, $v2)");
         $i3 = $i2->gcd($i1);
-        echo "BCMATH gcd($v2, $v1): ".$i3->toString()."\n";
+        $this->assertSame("12341123342312422313245", $i3->toString(), "BCMATH gcd($v2, $v1)");
+
+    }
+
+    public function testFact() {
 
         $val = '30';
         $i1 = Math_Integer::create($val, MATH_INTEGER_GMP);
-        echo "GMP int = ".$i1->toString()."\n";
+        $this->assertSame('30', $i1->toString());
+
         $err = $i1->fact();
-        if($err == true) {
-            $fact1 = $i1->toString();
-            echo "GMP int! = $fact1\n";
-        } else {
-            print_r($err);
-        }
-        $i1 = Math_Integer::create($val, MATH_INTEGER_GMP);
-        echo "BCMATH int = ".$i1->toString()."\n";
+        $this->assertTrue($err);
+        $fact1 = $i1->toString();
+        $this->assertSame("265252859812191058636308480000000", $fact1);
+
+
+        $i1 = Math_Integer::create($val, MATH_INTEGER_BCMATH);
+        $this->assertSame('30', $i1->toString());
         $err = $i1->fact();
-        if($err == true) {
-            $fact2 = $i1->toString();
-            echo "BCMATH int! = $fact2\n";
-        } else {
-            print_r($err);
-        }
+        $this->assertTrue($err);
+        $fact2 = $i1->toString();
+        $this->assertSame("265252859812191058636308480000000", $fact2);
 
         $this->assertSame($fact1, $fact2, "GMP and BCMATH gave different results");
     }
