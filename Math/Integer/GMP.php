@@ -1,7 +1,6 @@
 <?php
 
-//include_once 'Math/Integer/common.php';
-include_once 'common.php';
+require_once 'Math/Integer/Common.php';
 
 class Math_Integer_GMP extends Math_Integer_Common {
     

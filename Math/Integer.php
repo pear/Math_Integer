@@ -26,8 +26,8 @@ define ('HAS_BCMATH', (boolean) extension_loaded('bcmath'));
 
 define ('MATH_INTEGER_AUTO', 'auto');
 define ('MATH_INTEGER_STANDARD', 'standard');
-define ('MATH_INTEGER_BCMATH', 'bcmath');
-define ('MATH_INTEGER_GMP', 'gmp');
+define ('MATH_INTEGER_BCMATH', 'BCMATH');
+define ('MATH_INTEGER_GMP', 'GMP');
 
 $_math_integer_types = array(
                 MATH_INTEGER_STANDARD,
@@ -35,6 +35,7 @@ $_math_integer_types = array(
                 MATH_INTEGER_GMP
             );
 
+require_once 'Math/Integer/GMP.php';
 class Math_Integer {
 
     function create($val, $type=MATH_INTEGER_AUTO, $truncate=false) {
@@ -53,7 +54,7 @@ class Math_Integer {
                          implode(', ', $GLOBALS['_math_integer_valid_types']));
         }
         $classFile = "Math/Integer/{$type}.php";
-        $className = 'Math_Integer_'.ucfirst($type);
+        $className = 'Math_Integer_'. $type;
         // convert to a string representing an integer
         $value = Math_Integer::_toIntegerString($val, $type, $truncate);
         if (PEAR::isError($value)) {
