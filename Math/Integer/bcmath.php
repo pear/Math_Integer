@@ -6,7 +6,6 @@ bcscale(0);
 
 class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
     
-    function Math_Integer_BCMATH($value) {/*{{{*/
         $this->setValue($value);
     }/*}}}*/
 
@@ -56,8 +55,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         }
     }/*}}}*/
 
-    function add(&$int) {/*{{{*/
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+    function add(Math_Integer $int) {/*{{{*/
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         $newval = bcadd($this->getValue(), $int->getValue());
@@ -71,8 +70,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         return true;
     }/*}}}*/
 
-    function sub(&$int) {/*{{{*/
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+    function sub(Math_Integer $int) {/*{{{*/
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         $newval = bcsub($this->getValue(), $int->getValue());
@@ -86,8 +85,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         return true;
     }/*}}}*/
 
-    function mul(&$int) {/*{{{*/
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+    function mul(Math_Integer $int) {/*{{{*/
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         $newval = bcmul($this->getValue(), $int->getValue());
@@ -95,8 +94,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         return true;
     }/*}}}*/
 
-    function div(&$int) {/*{{{*/
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+    function div(Math_Integer $int) {/*{{{*/
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         if ($int->isZero()) {
@@ -107,8 +106,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         return true;
     }/*}}}*/
 
-    function pow(&$int) {/*{{{*/
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+    function pow(Math_Integer $int) {/*{{{*/
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Exponent is not a Math_Integer_BCMATH object');
         }
         $newval = bcpow($this->getValue(), $int->getValue());
@@ -116,15 +115,15 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         return true;
     }/*}}}*/
 
-    function powmod(&$int, &$mod) {/*{{{*/
+    function powmod(Math_Integer $int, Math_Integer $mod) {/*{{{*/
         $err = '';
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+        if (!$this->_is(Math_Integer $int, 'Math_Integer_BCMATH')) {
             $err .= 'Exponent is not a Math_Integer_BCMATH object.';
         }
         if (!empty($err)) {
             $err .= ' ';
         }
-        if (!$this->_is(&$mod, 'Math_Integer_BCMATH')) {
+        if (!$this->_is(Math_Integer $mod, 'Math_Integer_BCMATH')) {
             $err .= 'Modulus is not a Math_Integer_BCMATH object.';
         } else {
             if ($mod->isZero() || $mod->isNegative()) {
@@ -151,8 +150,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         }
     }/*}}}*/
 
-    function mod(&$int) {/*{{{*/
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+    function mod(Math_Integer $int) {/*{{{*/
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             $err = 'Modulus is not a Math_Integer_BCMATH object.';
         } else {
             if ($int->isZero() || $int->isNegative()) {
@@ -167,8 +166,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         return true;
     }/*}}}*/
 
-    function compare(&$int) {/*{{{*/
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+    function compare(Math_Integer $int) {/*{{{*/
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         return bccomp($this->getValue(), $int->getValue());
@@ -184,8 +183,8 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         }
     }/*}}}*/
 
-    function &gcd(&$int) {/*{{{*/
-        if (!$this->_is(&$int, 'Math_Integer_BCMATH')) {
+    function gcd(Math_Integer $int) {/*{{{*/
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             $err = 'Modulus is not a Math_Integer_BCMATH object.';
         }
         // if both are the same, return either
