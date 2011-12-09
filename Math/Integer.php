@@ -37,7 +37,7 @@ $_math_integer_types = array(
 
 class Math_Integer {/*{{{*/
 
-    function &create($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
+    function create($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
         if ($type == MATH_INTEGER_AUTO || $type == null) { 
             // decide what object to instantiate
             $type = Math_Integer::_selectType();
@@ -78,15 +78,15 @@ class Math_Integer {/*{{{*/
         }
     }/*}}}*/
 
-    function &createGMP($val, $truncate=false) {/*{{{*/
+    function createGMP($val, $truncate=false) {/*{{{*/
         return Math_Integer::create($val, MATH_INTEGER_GMP, $truncate);
     }/*}}}*/
 
-    function &createBCMATH($val, $truncate=false) {/*{{{*/
+    function createBCMATH($val, $truncate=false) {/*{{{*/
         return Math_Integer::create($val, MATH_INTEGER_BCMATH, $truncate);
     }/*}}}*/
 
-    function &createStandard($val, $truncate=false) {/*{{{*/
+    function createStandard($val, $truncate=false) {/*{{{*/
         return Math_Integer::create($val, MATH_INTEGER_STANDARD, $truncate);
     }/*}}}*/
 

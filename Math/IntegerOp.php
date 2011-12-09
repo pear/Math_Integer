@@ -42,7 +42,7 @@ class Math_IntegerOp {/*{{{*/
      * @return boolean TRUE if parameter is an instance of Math_Integer, FALSE otherwise
      * @access public
      */
-    function isInteger(&$int) {/*{{{*/
+    function isInteger(Math_Integer $int) {/*{{{*/
         return strtolower(get_class($int)) != 'math_integer_common' 
                 && is_subclass_of($int, 'math_integer_common');
     }/*}}}*/
@@ -54,7 +54,7 @@ class Math_IntegerOp {/*{{{*/
      * @return mixed TRUE if Math_Integer object is odd, FALSE if it is not, PEAR_Error on error.
      * @access public
      */
-    function isOdd(&$int) {/*{{{*/
+    function isOdd(Math_Integer $int) {/*{{{*/
         $err = Math_IntegerOp::_validInt($int);
         if (PEAR::isError($err)) {
             return $err;
@@ -69,7 +69,7 @@ class Math_IntegerOp {/*{{{*/
      * @return mixed TRUE if Math_Integer object is even, FALSE if it is not, PEAR_Error on error.
      * @access public
      */
-    function isEven(&$int) {/*{{{*/
+    function isEven(Math_Integer $int) {/*{{{*/
         $err = Math_IntegerOp::_validInt($int);
         if (PEAR::isError($err)) {
             return $err;
@@ -84,7 +84,7 @@ class Math_IntegerOp {/*{{{*/
      * @return mixed TRUE if Math_Integer object is positive, FALSE if it is not, PEAR_Error on error.
      * @access public
      */
-    function isPositive(&$int) {/*{{{*/
+    function isPositive(Math_Integer $int) {/*{{{*/
         $err = Math_IntegerOp::_validInt($int);
         if (PEAR::isError($err)) {
             return $err;
@@ -99,7 +99,7 @@ class Math_IntegerOp {/*{{{*/
      * @return mixed TRUE if Math_Integer object is negative, FALSE if it is not, PEAR_Error on error.
      * @access public
      */
-    function isNegative(&$int) {/*{{{*/
+    function isNegative(Math_Integer $int) {/*{{{*/
         $err = Math_IntegerOp::_validInt($int);
         if (PEAR::isError($err)) {
             return $err;
@@ -114,7 +114,7 @@ class Math_IntegerOp {/*{{{*/
      * @return mixed TRUE if Math_Integer object is zero, FALSE if it is not, PEAR_Error on error.
      * @access public
      */
-    function isZero(&$int) {/*{{{*/
+    function isZero(Math_Integer $int) {/*{{{*/
         $err = Math_IntegerOp::_validInt($int);
         if (PEAR::isError($err)) {
             return $err;
@@ -130,7 +130,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &add(&$int1, &$int2) {/*{{{*/
+    function &add(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
@@ -150,7 +150,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &sub(&$int1, &$int2) {/*{{{*/
+    function &sub(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
@@ -170,7 +170,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &mul(&$int1, &$int2) {/*{{{*/
+    function &mul(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
@@ -190,7 +190,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &div(&$int1, &$int2) {/*{{{*/
+    function &div(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
@@ -210,7 +210,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &mod(&$int1, &$int2) {/*{{{*/
+    function &mod(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
@@ -230,7 +230,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &pow(&$int1, &$int2) {/*{{{*/
+    function &pow(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
@@ -251,7 +251,7 @@ class Math_IntegerOp {/*{{{*/
      * @access public
      * @see Math_IntegerOp::sign
      */
-    function &gcd(&$int1, &$int2) {/*{{{*/
+    function &gcd(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
@@ -270,7 +270,7 @@ class Math_IntegerOp {/*{{{*/
      * @access public
      * @see Math_IntegerOp::sign
      */
-    function &compare(&$int1, &$int2) {/*{{{*/
+    function &compare(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInts($int1, $int2))) {
             return $err;
         }
@@ -287,7 +287,7 @@ class Math_IntegerOp {/*{{{*/
      * @return mixed and integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &sign(&$int1) {/*{{{*/
+    function &sign(Math_Integer $int1) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
@@ -301,7 +301,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &negate(&$int1) {/*{{{*/
+    function &negate(Math_Integer $int1) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
@@ -320,7 +320,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &sqrt(&$int1) {/*{{{*/
+    function &sqrt(Math_Integer $int1) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
@@ -339,7 +339,7 @@ class Math_IntegerOp {/*{{{*/
      * @return object Math_Integer on success, PEAR_Error otherwise
      * @access public
      */
-    function &abs(&$int1) {/*{{{*/
+    function &abs(Math_Integer $int1) {/*{{{*/
         if (PEAR::isError($err = Math_IntegerOp::_validInt($int1))) {
             return $err;
         }
@@ -361,7 +361,7 @@ class Math_IntegerOp {/*{{{*/
      * @return mixed TRUE if both are Math_Integer objects, PEAR_Error otherwise
      * @access private
      */
-    function _validInts(&$int1, &$int2) {/*{{{*/
+    function _validInts(Math_Integer $int1, Math_Integer $int2) {/*{{{*/
         $err1 = Math_IntegerOp::_validInt($int1);
         $err2 = Math_IntegerOp::_validInt($int2);
         $error = '';
@@ -387,7 +387,7 @@ class Math_IntegerOp {/*{{{*/
      * @return mixed TRUE if is a Math_Integer object, PEAR_Error otherwise
      * @access private
      */
-    function _validInt(&$int1) {/*{{{*/
+    function _validInt(Math_Integer $int1) {/*{{{*/
         $error = '';
         if (!Math_IntegerOp::isInteger($int1)) {
             $error = 'Is not an Integer object.';
