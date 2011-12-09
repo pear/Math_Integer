@@ -4,16 +4,16 @@ include_once 'common.php';
 //include_once 'Math/Integer/common.php';
 bcscale(0);
 
-class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
+class Math_Integer_BCMATH extends Math_Integer_Common {
     
         $this->setValue($value);
-    }/*}}}*/
+    }
 
-    function makeClone() {/*{{{*/
+    function makeClone() {
         return new Math_Integer_BCMATH($this->toString());
-    }/*}}}*/
+    }
 
-    function setValue($value) {/*{{{*/
+    function setValue($value) {
         if ($this->_is($value, 'Math_Integer_BCMATH')) {
             $this->setValue($value->toString());
         } elseif (is_scalar($value)) {
@@ -21,22 +21,22 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         } else {
             $this->_value = null;
         }
-    }/*}}}*/
+    }
 
-    function negate() {/*{{{*/
+    function negate() {
         $newval = bcmul($this->getValue(), -1);
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function abs() {/*{{{*/
+    function abs() {
         if ($this->isNegative()) {
             return $this->negate();
         }
         return true;
-    }/*}}}*/
+    }
 
-    function fact() {/*{{{*/
+    function fact() {
         if ($this->isNegative()) {
             return PEAR::raiseError('Factorial of a negative number is undefined');
         }
@@ -53,48 +53,48 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
             $this->setValue($fact);
             return true;
         }
-    }/*}}}*/
+    }
 
-    function add(Math_Integer $int) {/*{{{*/
+    function add(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         $newval = bcadd($this->getValue(), $int->getValue());
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function inc() {/*{{{*/
+    function inc() {
         $newval = bcadd($this->getValue(), 1);
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function sub(Math_Integer $int) {/*{{{*/
+    function sub(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         $newval = bcsub($this->getValue(), $int->getValue());
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function dec() {/*{{{*/
+    function dec() {
         $newval = bcsub($this->getValue(), 1);
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function mul(Math_Integer $int) {/*{{{*/
+    function mul(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         $newval = bcmul($this->getValue(), $int->getValue());
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function div(Math_Integer $int) {/*{{{*/
+    function div(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
@@ -104,18 +104,18 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         $newval = bcdiv($this->getValue(), $int->getValue());
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function pow(Math_Integer $int) {/*{{{*/
+    function pow(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Exponent is not a Math_Integer_BCMATH object');
         }
         $newval = bcpow($this->getValue(), $int->getValue());
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function powmod(Math_Integer $int, Math_Integer $mod) {/*{{{*/
+    function powmod(Math_Integer $int, Math_Integer $mod) {
         $err = '';
         if (!$this->_is(Math_Integer $int, 'Math_Integer_BCMATH')) {
             $err .= 'Exponent is not a Math_Integer_BCMATH object.';
@@ -136,9 +136,9 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         $newval = bcpowmod($this->getValue(), $int->getValue(), $mod->getValue());
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function sqrt() {/*{{{*/
+    function sqrt() {
         if ($this->isZero()) {
             return true;
         } elseif ($this->isNegative()) {
@@ -148,9 +148,9 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
             $this->setValue($newval);
             return true;
         }
-    }/*}}}*/
+    }
 
-    function mod(Math_Integer $int) {/*{{{*/
+    function mod(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             $err = 'Modulus is not a Math_Integer_BCMATH object.';
         } else {
@@ -164,16 +164,16 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         $newval = bcmod($this->getValue(), $int->getValue());
         $this->setValue($newval);
         return true;
-    }/*}}}*/
+    }
 
-    function compare(Math_Integer $int) {/*{{{*/
+    function compare(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             return PEAR::raiseError('Paramater is not a Math_Integer_BCMATH object');
         }
         return bccomp($this->getValue(), $int->getValue());
-    }/*}}}*/
+    }
 
-    function sign() {/*{{{*/
+    function sign() {
         if ($this->isNegative()) {
             return -1;
         } elseif ($this->isZero()) {
@@ -181,9 +181,9 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         } else {
             return 1;
         }
-    }/*}}}*/
+    }
 
-    function gcd(Math_Integer $int) {/*{{{*/
+    function gcd(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             $err = 'Modulus is not a Math_Integer_BCMATH object.';
         }
@@ -213,28 +213,28 @@ class Math_Integer_BCMATH extends Math_Integer_Common {/*{{{*/
         } else {
             return $int2;
         }
-    }/*}}}*/
+    }
 
-    function isOdd() {/*{{{*/
+    function isOdd() {
         return bcmod($this->getValue(), 2) != 0;
-    }/*}}}*/
+    }
 
-    function isEven() {/*{{{*/
+    function isEven() {
         return bcmod($this->getValue(), 2) == 0;
-    }/*}}}*/
+    }
 
-    function isPositive() {/*{{{*/
+    function isPositive() {
         return bccomp($this->getValue(), 0) == 1;
-    }/*}}}*/
+    }
 
-    function isNegative() {/*{{{*/
+    function isNegative() {
         return bccomp($this->getValue(), 0) == -1;
-    }/*}}}*/
+    }
 
-    function isZero() {/*{{{*/
+    function isZero() {
         return bccomp($this->getValue(), 0) == 0;
-    }/*}}}*/
+    }
 
-}/*}}}*/
+}
 
 ?>

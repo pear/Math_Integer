@@ -35,9 +35,9 @@ $_math_integer_types = array(
                 MATH_INTEGER_GMP
             );
 
-class Math_Integer {/*{{{*/
+class Math_Integer {
 
-    function create($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
+    function create($val, $type=MATH_INTEGER_AUTO, $truncate=false) {
         if ($type == MATH_INTEGER_AUTO || $type == null) { 
             // decide what object to instantiate
             $type = Math_Integer::_selectType();
@@ -76,21 +76,21 @@ class Math_Integer {/*{{{*/
             return PEAR::raiseError("Error: could not find $classFile. Cannot ".
                                     "instantiate $className object");
         }
-    }/*}}}*/
+    }
 
-    function createGMP($val, $truncate=false) {/*{{{*/
+    function createGMP($val, $truncate=false) {
         return Math_Integer::create($val, MATH_INTEGER_GMP, $truncate);
-    }/*}}}*/
+    }
 
-    function createBCMATH($val, $truncate=false) {/*{{{*/
+    function createBCMATH($val, $truncate=false) {
         return Math_Integer::create($val, MATH_INTEGER_BCMATH, $truncate);
-    }/*}}}*/
+    }
 
-    function createStandard($val, $truncate=false) {/*{{{*/
+    function createStandard($val, $truncate=false) {
         return Math_Integer::create($val, MATH_INTEGER_STANDARD, $truncate);
-    }/*}}}*/
+    }
 
-    function _toIntegerString($val, $type=MATH_INTEGER_AUTO, $truncate=false) {/*{{{*/
+    function _toIntegerString($val, $type=MATH_INTEGER_AUTO, $truncate=false) {
         $integerRE = '/^[[:digit:]]+$/';
         $floatRE = '/^([[:digit:]]+)\.[[:digit:]]+$/';
         $hexRE = '/^[[:xdigit:]]+$/';
@@ -130,9 +130,9 @@ class Math_Integer {/*{{{*/
         } else {
             return PEAR::raiseError("Invalid value: $val does not represent an integer");
         }
-    }/*}}}*/
+    }
 
-    function _selectType() {/*{{{*/
+    function _selectType() {
         if (HAS_GMP) {
             $selectedType = MATH_INTEGER_GMP;
         } elseif (HAS_BCMATH) {
@@ -141,7 +141,7 @@ class Math_Integer {/*{{{*/
             $selectedType = MATH_INTEGER_STANDARD;
         }
         return $selectedType;
-    }/*}}}*/
+    }
     
 }/* end of Math_Integer }}}*/
 
