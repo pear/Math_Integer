@@ -3,21 +3,21 @@
 //include_once 'Math/Integer/common.php';
 include_once 'common.php';
 
-class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
+class Math_Integer_GMP extends Math_Integer_Common {
     
-    function __construct($value) {/*{{{*/
+    function __construct($value) {
         $this->setValue($value);
-    }/*}}}*/
+    }
 
-    function toString() {/*{{{*/
+    function toString() {
         return gmp_strval($this->_value);
-    }/*}}}*/
+    }
 
-    function makeClone() {/*{{{*/
+    function makeClone() {
         return new Math_Integer_GMP($this->toString());
-    }/*}}}*/
+    }
 
-    function setValue($value) {/*{{{*/
+    function setValue($value) {
         if ($this->_is($value, 'Math_Integer_GMP')) {
             $this->setValue($value->toString());
         } elseif (is_resource($value) && get_resource_type($value) == 'GMP integer') {
@@ -27,13 +27,13 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
         } else {
             $this->_value = null;
         }
-    }/*}}}*/
+    }
 
-    function getValue() {/*{{{*/
+    function getValue() {
         return $this->_value;
-    }/*}}}*/
+    }
 
-    function negate() {/*{{{*/
+    function negate() {
         $newval = gmp_neg($this->getValue());
         if (is_resource($newval)) {
             $this->setValue($newval);
@@ -42,9 +42,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
             return PEAR::raiseError('Error while negating Math_Integer_GMP '.
                                     'object: '.$this->toString());
         }
-    }/*}}}*/
+    }
 
-    function abs() {/*{{{*/
+    function abs() {
         $newval = gmp_abs($this->getValue());
         if (is_resource($newval)) {
             $this->setValue($newval);
@@ -53,9 +53,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
             return PEAR::raiseError('Error while doing Math_Integer_GMP::abs() '.
                                     'object: '.$this->toString());
         }
-    }/*}}}*/
+    }
 
-    function fact() {/*{{{*/
+    function fact() {
         $newval = gmp_fact($this->toString());
         if (is_resource($newval)) {
             $this->setValue($newval);
@@ -64,9 +64,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
             return PEAR::raiseError('Error while doing Math_Integer_GMP::fact() '.
                                     'object: '.$this->toString());
         }
-    }/*}}}*/
+    }
 
-    function add(Math_Integer $int) {/*{{{*/
+    function add(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
         }
@@ -79,9 +79,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                     'objects: '.$this->toString().' and '.
                                     $int->toString());
         }
-    }/*}}}*/
+    }
 
-    function inc() {/*{{{*/
+    function inc() {
         $newval = gmp_add($this->getValue(), gmp_init(1));
         if (is_resource($newval)) {
             $this->setValue($newval);
@@ -90,9 +90,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
             return PEAR::raiseError('Error while incrementing Math_Integer_GMP '.
                                     'object: '.$this->toString());
         }
-    }/*}}}*/
+    }
 
-    function sub(Math_Integer $int) {/*{{{*/
+    function sub(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
         }
@@ -105,9 +105,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                     'objects: '.$this->toString().' and '.
                                     $int->toString());
         }
-    }/*}}}*/
+    }
 
-    function dec() {/*{{{*/
+    function dec() {
         $newval = gmp_sub($this->getValue(), gmp_init(1));
         if (is_resource($newval)) {
             $this->setValue($newval);
@@ -116,9 +116,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
             return PEAR::raiseError('Error while decrementing Math_Integer_GMP '.
                                     'object: '.$this->toString());
         }
-    }/*}}}*/
+    }
 
-    function mul(Math_Integer $int) {/*{{{*/
+    function mul(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
         }
@@ -131,9 +131,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                     'objects: '.$this->toString().' and '.
                                     $int->toString());
         }
-    }/*}}}*/
+    }
 
-    function div(Math_Integer $int) {/*{{{*/
+    function div(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
         }
@@ -150,9 +150,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                     $int->toString());
         }
         return $this->_noImplemented('div');
-    }/*}}}*/
+    }
 
-    function pow(Math_Integer $int) {/*{{{*/
+    function pow(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
         }
@@ -171,9 +171,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                         $int->toString());
             }
         }
-    }/*}}}*/
+    }
 
-    function powmod(Math_Integer $int, Math_Integer $mod) {/*{{{*/
+    function powmod(Math_Integer $int, Math_Integer $mod) {
         $err = '';
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             $err .= 'Exponent is not a Math_Integer_GMP object.';
@@ -200,9 +200,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                     'objects: '.$this->toString().', '.
                                     $int->toString().', and '.$mod->toString());
         }
-    }/*}}}*/
+    }
 
-    function sqrt() {/*{{{*/
+    function sqrt() {
         if ($this->isZero()) {
             return true;
         } elseif ($this->isNegative()) {
@@ -217,9 +217,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                         $this->toString());
             }
         }
-    }/*}}}*/
+    }
 
-    function mod(Math_Integer $int) {/*{{{*/
+    function mod(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             return PEAR::raiseError('Modulus is not a Math_Integer_GMP object');
         } elseif ($int->isZero() || $int->isNegative()) {
@@ -234,9 +234,9 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                     'objects: '.$this->toString().' and '.
                                     $int->toString());
         }
-    }/*}}}*/
+    }
 
-    function compare(Math_Integer $int) {/*{{{*/
+    function compare(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
         }
@@ -248,13 +248,13 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
         } else {
             return -1;
         }
-    }/*}}}*/
+    }
 
-    function sign() {/*{{{*/
+    function sign() {
         return gmp_sign($this->getValue());
-    }/*}}}*/
+    }
 
-    function gcd(Math_Integer $int) {/*{{{*/
+    function gcd(Math_Integer $int) {
         if (!$this->_is($int, 'Math_Integer_GMP')) {
             return PEAR::raiseError('Parameter is not a Math_Integer_GMP object');
         }
@@ -263,29 +263,29 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
             return PEAR::raiseError('Unkown error calculating GCD');
         }
         return new Math_Integer_GMP($gcd);
-    }/*}}}*/
+    }
 
-    function isOdd() {/*{{{*/
+    function isOdd() {
         return gmp_mod($this->getValue(), gmp_init(2)) != 0;
-    }/*}}}*/
+    }
 
-    function isEven() {/*{{{*/
+    function isEven() {
         return gmp_mod($this->getValue(), gmp_init(2)) == 0;
-    }/*}}}*/
+    }
 
-    function isPositive() {/*{{{*/
+    function isPositive() {
         return gmp_sign($this->getValue()) == 1;
-    }/*}}}*/
+    }
 
-    function isNegative() {/*{{{*/
+    function isNegative() {
         return gmp_sign($this->getValue()) == -1;
-    }/*}}}*/
+    }
 
-    function isZero() {/*{{{*/
+    function isZero() {
         return gmp_sign($this->getValue()) == 0;
-    }/*}}}*/
+    }
 
-    function isPrime($reps=10) {/*{{{*/
+    function isPrime($reps=10) {
         if (!is_int($reps)) {
             return PEAR::raiseError('Expecting an integer for the number of repeats');
         }
@@ -294,8 +294,6 @@ class Math_Integer_GMP extends Math_Integer_Common {/*{{{*/
                                     "and 10 (default). You requested $reps repreats");
         }
         return gmp_prob_prime($this->getValue(), $reps);
-    }/*}}}*/
+    }
 
-}/*}}}*/
-
-?>
+}
