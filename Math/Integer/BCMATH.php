@@ -1,14 +1,10 @@
 <?php
 
-include_once 'common.php';
-//include_once 'Math/Integer/common.php';
+include_once 'Math/Integer/Common.php';
 bcscale(0);
 
 class Math_Integer_BCMATH extends Math_Integer_Common {
     
-        $this->setValue($value);
-    }
-
     function makeClone() {
         return new Math_Integer_BCMATH($this->toString());
     }
@@ -117,13 +113,13 @@ class Math_Integer_BCMATH extends Math_Integer_Common {
 
     function powmod(Math_Integer $int, Math_Integer $mod) {
         $err = '';
-        if (!$this->_is(Math_Integer $int, 'Math_Integer_BCMATH')) {
+        if (!$this->_is($int, 'Math_Integer_BCMATH')) {
             $err .= 'Exponent is not a Math_Integer_BCMATH object.';
         }
         if (!empty($err)) {
             $err .= ' ';
         }
-        if (!$this->_is(Math_Integer $mod, 'Math_Integer_BCMATH')) {
+        if (!$this->_is($mod, 'Math_Integer_BCMATH')) {
             $err .= 'Modulus is not a Math_Integer_BCMATH object.';
         } else {
             if ($mod->isZero() || $mod->isNegative()) {

@@ -114,7 +114,7 @@ class Math_Integer_Common {
         return $this->_noImplemented('probPrime');
     }
 
-    function _is(Math_Integer $obj, $classname) {
+    function _is($obj, $classname) {
         if (!is_object($obj)) {
             return false;
         }
