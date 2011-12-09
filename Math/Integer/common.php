@@ -6,7 +6,7 @@ class Math_Integer_Common {/*{{{*/
 
     var $_value;
     
-    function Math_Integer_Common($value) {/*{{{*/
+    function __construct($value) {/*{{{*/
         $this->setValue($value);
     }/*}}}*/
 
@@ -38,7 +38,7 @@ class Math_Integer_Common {/*{{{*/
         return $this->_noImplemented('fact');
     }/*}}}*/
 
-    function add(&$int) {/*{{{*/
+    function add(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('add');
     }/*}}}*/
 
@@ -46,7 +46,7 @@ class Math_Integer_Common {/*{{{*/
         return $this->_noImplemented('inc');
     }/*}}}*/
 
-    function sub(&$int) {/*{{{*/
+    function sub(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('sub');
     }/*}}}*/
 
@@ -54,19 +54,19 @@ class Math_Integer_Common {/*{{{*/
         return $this->_noImplemented('dec');
     }/*}}}*/
 
-    function mul(&$int) {/*{{{*/
+    function mul(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('mul');
     }/*}}}*/
 
-    function div(&$int) {/*{{{*/
+    function div(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('div');
     }/*}}}*/
 
-    function pow(&$int) {/*{{{*/
+    function pow(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('pow');
     }/*}}}*/
 
-    function powmod(&$int) {/*{{{*/
+    function powmod(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('pow');
     }/*}}}*/
 
@@ -74,19 +74,19 @@ class Math_Integer_Common {/*{{{*/
         return $this->_noImplemented('sqrt');
     }/*}}}*/
 
-    function mod(&$int) {/*{{{*/
+    function mod(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('mod');
     }/*}}}*/
 
-    function compare(&$int) {/*{{{*/
+    function compare(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('compare');
     }/*}}}*/
 
-    function sign(&$int) {/*{{{*/
+    function sign(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('sign');
     }/*}}}*/
 
-    function &gcd(&$int) {/*{{{*/
+    function gcd(Math_Integer $int) {/*{{{*/
         return $this->_noImplemented('gcd');
     }/*}}}*/
 
@@ -114,7 +114,7 @@ class Math_Integer_Common {/*{{{*/
         return $this->_noImplemented('probPrime');
     }/*}}}*/
 
-    function _is(&$obj, $classname) {/*{{{*/
+    function _is(Math_Integer $obj, $classname) {/*{{{*/
         if (!is_object($obj)) {
             return false;
         }
